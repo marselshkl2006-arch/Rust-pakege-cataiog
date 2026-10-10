@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_title">Crates Catalog</string>
+    <string name="search_hint">Search crates</string>
+    <string name="loading">Loading…</string>
+    <string name="error_title">Something went wrong</string>
+    <string name="error_retry">Retry</string>
+    <string name="empty_list">Nothing found</string>
+    <string name="back">Back</string>
+    <string name="dependencies">Dependencies</string>
+    <string name="no_dependencies">No dependencies</string>
+    <string name="owner">Owner</string>
+    <string name="downloads">Downloads</string>
+    <string name="version">Version</string>
+    <string name="versions">Versions</string>
+    <string name="repository">Repository</string>
+    <string name="documentation">Documentation</string>
+    <string name="description_missing">No description</string>
+    <string name="login">Login</string>
+    <string name="user_name">Name</string>
+    <string name="theme_toggle">Theme</string>
+    <string name="language_toggle">Language</string>
+    <string name="data_source_mock">Mock data</string>
+    <string name="data_source_network">crates.io</string>
+</resources>
