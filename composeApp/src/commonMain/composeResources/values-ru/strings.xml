@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_title">Каталог крейтов</string>
+    <string name="search_hint">Поиск крейтов</string>
+    <string name="loading">Загрузка…</string>
+    <string name="error_title">Что-то пошло не так</string>
+    <string name="error_retry">Повторить</string>
+    <string name="empty_list">Ничего не найдено</string>
+    <string name="back">Назад</string>
+    <string name="dependencies">Зависимости</string>
+    <string name="no_dependencies">Нет зависимостей</string>
+    <string name="owner">Владелец</string>
+    <string name="downloads">Загрузки</string>
+    <string name="version">Версия</string>
+    <string name="versions">Версии</string>
+    <string name="repository">Репозиторий</string>
+    <string name="documentation">Документация</string>
+    <string name="description_missing">Нет описания</string>
+    <string name="login">Логин</string>
+    <string name="user_name">Имя</string>
+    <string name="theme_toggle">Тема</string>
+    <string name="language_toggle">Язык</string>
+    <string name="data_source_mock">Тестовые данные</string>
+    <string name="data_source_network">crates.io</string>
+</resources>
