@@ -3,7 +3,10 @@ package model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
+/**
+ * Field names follow the crates.io API. `dependencies` and `owners` are not part of the
+ * search/detail payload: they are filled in by the data layer from separate endpoints.
+ */
 @Serializable
 data class Crate(
     val name: String,
