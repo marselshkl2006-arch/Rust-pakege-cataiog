@@ -30,11 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cratescatalog.res.Res
 import cratescatalog.res.app_title
-import cratescatalog.res.data_source_mock
-import cratescatalog.res.data_source_network
 import cratescatalog.res.description_missing
 import cratescatalog.res.downloads
-import cratescatalog.res.language_toggle
 import cratescatalog.res.search_hint
 import cratescatalog.res.theme_toggle
 import model.Crate
@@ -49,20 +46,17 @@ import ui.common.formatNumber
 fun ListScreen(
     state: ListState,
     language: String,
-    useMocks: Boolean,
     onQueryChange: (String) -> Unit,
     onItemClick: (Crate) -> Unit,
     onLoadMore: () -> Unit,
     onRetry: () -> Unit,
     onToggleTheme: () -> Unit,
     onToggleLanguage: () -> Unit,
-    onToggleDataSource: () -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
 ) {
     val visible = state.filtered
 
-    // Ask for the next page when the last visible item is close to the end of the list.
     val nearEnd by remember(lazyListState) {
         derivedStateOf {
             val info = lazyListState.layoutInfo
@@ -80,16 +74,8 @@ fun ListScreen(
             TopAppBar(
                 title = { Text(stringResource(Res.string.app_title)) },
                 actions = {
-                    TextButton(onClick = onToggleDataSource) {
-                        Text(
-                            stringResource(
-                                if (useMocks) Res.string.data_source_mock else Res.string.data_source_network,
-                            ),
-                        )
-                    }
                     TextButton(onClick = onToggleTheme) { Text(stringResource(Res.string.theme_toggle)) }
                     TextButton(onClick = onToggleLanguage) {
-                        // Shows the language you will switch to, e.g. "EN" while the UI is Russian.
                         Text(if (language == "ru") "EN" else "RU")
                     }
                 },

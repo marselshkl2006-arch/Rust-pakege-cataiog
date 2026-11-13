@@ -11,7 +11,6 @@ import data.toUserMessage
 import kotlin.coroutines.cancellation.CancellationException
 import model.Crate
 
-/** Case-insensitive match on name or description; a blank query keeps everything. */
 fun List<Crate>.filterByQuery(query: String): List<Crate> {
     val q = query.trim()
     if (q.isEmpty()) return this
@@ -29,16 +28,14 @@ class ListState {
 
     val filtered: List<Crate> get() = crates.filterByQuery(query)
 
-    // Invalidates in-flight requests when a new first-page load starts.
     private var generation = 0
-    private var loadedKey: String? = null
+    private var loadedQuery: String? = null
 
-    /** True when the current query/data source has not been loaded yet (or the last load failed). */
-    fun needsReload(useMocks: Boolean): Boolean = loadedKey != keyFor(useMocks) || error != null
+    fun needsReload(): Boolean = loadedQuery != query.trim() || error != null
 
-    suspend fun loadFirstPage(repository: CratesRepository, useMocks: Boolean) {
+    suspend fun loadFirstPage(repository: CratesRepository) {
         val gen = ++generation
-        loadedKey = keyFor(useMocks)
+        loadedQuery = query.trim()
         crates = emptyList()
         page = 1
         endReached = false
@@ -47,10 +44,9 @@ class ListState {
         val result = try {
             repository.search(query, 1, DEFAULT_PER_PAGE)
         } catch (e: CancellationException) {
-            // Left the screen mid-load: make the next visit load again instead of staying empty.
             if (gen == generation) {
                 isLoading = false
-                loadedKey = null
+                loadedQuery = null
             }
             throw e
         }
@@ -85,6 +81,4 @@ class ListState {
             .onFailure { error = it.toUserMessage() }
         isLoading = false
     }
-
-    private fun keyFor(useMocks: Boolean) = "${query.trim()}|$useMocks"
 }

@@ -52,7 +52,7 @@ fun App() {
 
     val api = remember { CratesApi(createCratesClient(), Cache()) }
     DisposableEffect(api) { onDispose { api.close() } }
-    val repository = remember(api) { CratesRepository(api = api, useMocks = { appState.useMocks }) }
+    val repository = remember(api) { CratesRepository(api = api) }
 
     LocalizedContent(language = appState.language) {
         AppTheme(darkTheme = appState.isDarkTheme) {
@@ -60,12 +60,10 @@ fun App() {
                 NavDisplay(
                     backStack = navigator.backStack,
                     onBack = { navigator.goBack() },
-                    // Forward: new screen slides in from the right.
                     transitionSpec = {
                         slideInHorizontally(tween(SLIDE_MS)) { it } togetherWith
                             slideOutHorizontally(tween(SLIDE_MS)) { -it / 3 }
                     },
-                    // Back: previous screen slides in from the left, current one leaves to the right.
                     popTransitionSpec = {
                         slideInHorizontally(tween(SLIDE_MS)) { -it } togetherWith
                             slideOutHorizontally(tween(SLIDE_MS)) { it }
@@ -77,32 +75,30 @@ fun App() {
                     entryProvider = entryProvider {
                         entry<Screen.List> {
                             val scope = rememberCoroutineScope()
-                            LaunchedEffect(listState.query, appState.useMocks) {
-                                if (listState.needsReload(appState.useMocks)) {
+                            LaunchedEffect(listState.query) {
+                                if (listState.needsReload()) {
                                     if (listState.query.isNotBlank()) delay(300) // debounce typing
-                                    listState.loadFirstPage(repository, appState.useMocks)
+                                    listState.loadFirstPage(repository)
                                 }
                             }
                             ListScreen(
                                 state = listState,
                                 language = appState.language,
-                                useMocks = appState.useMocks,
                                 onQueryChange = { listState.query = it },
                                 onItemClick = { navigator.navigateTo(Screen.Detail(it.name)) },
                                 onLoadMore = { scope.launch { listState.loadNextPage(repository) } },
-                                onRetry = { scope.launch { listState.loadFirstPage(repository, appState.useMocks) } },
+                                onRetry = { scope.launch { listState.loadFirstPage(repository) } },
                                 onToggleTheme = { appState.toggleTheme() },
                                 onToggleLanguage = {
                                     appState.changeLanguage(if (appState.language == "ru") "en" else "ru")
                                 },
-                                onToggleDataSource = { appState.toggleDataSource() },
                                 lazyListState = listScrollState,
                             )
                         }
                         entry<Screen.Detail> { route ->
                             val state = remember(route.crateName) { DetailState() }
                             var retry by remember { mutableIntStateOf(0) }
-                            LaunchedEffect(route.crateName, appState.useMocks, retry) {
+                            LaunchedEffect(route.crateName, retry) {
                                 state.load(repository, route.crateName)
                             }
                             DetailScreen(
@@ -116,7 +112,7 @@ fun App() {
                         entry<Screen.Dependencies> { route ->
                             val state = remember(route.crateName) { DependenciesState() }
                             var retry by remember { mutableIntStateOf(0) }
-                            LaunchedEffect(route.crateName, appState.useMocks, retry) {
+                            LaunchedEffect(route.crateName, retry) {
                                 state.load(repository, route.crateName)
                             }
                             DependenciesScreen(
@@ -130,7 +126,7 @@ fun App() {
                         entry<Screen.Owner> { route ->
                             val state = remember(route.login) { OwnerState() }
                             var retry by remember { mutableIntStateOf(0) }
-                            LaunchedEffect(route.login, appState.useMocks, retry) {
+                            LaunchedEffect(route.login, retry) {
                                 state.load(repository, route.login)
                             }
                             OwnerScreen(
