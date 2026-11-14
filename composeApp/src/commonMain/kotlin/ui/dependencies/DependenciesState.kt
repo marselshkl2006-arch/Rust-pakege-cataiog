@@ -4,11 +4,12 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import data.CratesRepository
 import data.toUserMessage
 
 @Stable
-class DependenciesState {
+class DependenciesState : ViewModel() {
     var dependencies by mutableStateOf<List<String>>(emptyList())
     var isLoading by mutableStateOf(false)
     var error by mutableStateOf<String?>(null)

@@ -24,6 +24,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 const val DEFAULT_PER_PAGE = 20
 
+/** crates.io caps `per_page` at 100 (not 10000). Adjust here if the API changes. */
 const val MAX_PER_PAGE = 100
 
 sealed class ApiError(message: String, cause: Throwable? = null) : Exception(message, cause) {

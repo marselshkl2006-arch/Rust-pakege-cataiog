@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     implementation(projects.composeApp)
+    implementation(compose.components.resources)
     implementation(compose.desktop.currentOs)
     implementation(libs.kotlinx.coroutines.swing)
 }
