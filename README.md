@@ -30,9 +30,6 @@ python tools/check-strings.py      # EN/RU key parity
 - `webApp` - Wasm entry point
 - `androidApp` - Android entry point (`MainActivity`)
 
-## Mock <-> network
-The top-bar button "Mock data / crates.io" flips `AppState.useMocks`; `CratesRepository` reads the flag on every
-call, so the UI is identical for both sources. Default: mocks. On Web the real API may be blocked by CORS.
 
 ## Not in v1 (by design)
 No persistence (theme/language/data source live in memory), no width-adaptive layouts, no deep links / address bar

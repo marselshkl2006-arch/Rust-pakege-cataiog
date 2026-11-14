@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import data.Cache
@@ -45,9 +46,11 @@ private const val SLIDE_MS = 300
 @Composable
 fun App() {
     val systemDark = isSystemInDarkTheme()
-    val appState = remember { AppState(isDarkTheme = systemDark) }
+    
+    val appState: AppState = viewModel { AppState(isDarkTheme = systemDark) }
+    val listState: ListState = viewModel { ListState() }
+    
     val navigator = remember { Navigator() }
-    val listState = remember { ListState() }
     val listScrollState = rememberLazyListState()
 
     val api = remember { CratesApi(createCratesClient(), Cache()) }
@@ -77,7 +80,7 @@ fun App() {
                             val scope = rememberCoroutineScope()
                             LaunchedEffect(listState.query) {
                                 if (listState.needsReload()) {
-                                    if (listState.query.isNotBlank()) delay(300) // debounce typing
+                                    if (listState.query.isNotBlank()) delay(300)
                                     listState.loadFirstPage(repository)
                                 }
                             }
@@ -96,7 +99,7 @@ fun App() {
                             )
                         }
                         entry<Screen.Detail> { route ->
-                            val state = remember(route.crateName) { DetailState() }
+                            val state: DetailState = viewModel(key = route.crateName) { DetailState() }
                             var retry by remember { mutableIntStateOf(0) }
                             LaunchedEffect(route.crateName, retry) {
                                 state.load(repository, route.crateName)
@@ -110,7 +113,7 @@ fun App() {
                             )
                         }
                         entry<Screen.Dependencies> { route ->
-                            val state = remember(route.crateName) { DependenciesState() }
+                            val state: DependenciesState = viewModel(key = route.crateName) { DependenciesState() }
                             var retry by remember { mutableIntStateOf(0) }
                             LaunchedEffect(route.crateName, retry) {
                                 state.load(repository, route.crateName)
@@ -124,7 +127,7 @@ fun App() {
                             )
                         }
                         entry<Screen.Owner> { route ->
-                            val state = remember(route.login) { OwnerState() }
+                            val state: OwnerState = viewModel(key = route.login) { OwnerState() }
                             var retry by remember { mutableIntStateOf(0) }
                             LaunchedEffect(route.login, retry) {
                                 state.load(repository, route.login)

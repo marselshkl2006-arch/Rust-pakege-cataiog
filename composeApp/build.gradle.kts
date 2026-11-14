@@ -49,6 +49,7 @@ kotlin {
 
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
+            implementation(libs.lifecycle.viewmodel.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -68,5 +69,6 @@ kotlin {
 }
 
 compose.resources {
+    publicResClass = true
     packageOfResClass = "cratescatalog.res"
 }

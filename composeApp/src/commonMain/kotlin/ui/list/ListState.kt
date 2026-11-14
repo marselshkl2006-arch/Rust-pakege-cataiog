@@ -10,6 +10,7 @@ import data.DEFAULT_PER_PAGE
 import data.toUserMessage
 import kotlin.coroutines.cancellation.CancellationException
 import model.Crate
+import androidx.lifecycle.ViewModel
 
 fun List<Crate>.filterByQuery(query: String): List<Crate> {
     val q = query.trim()
@@ -18,7 +19,7 @@ fun List<Crate>.filterByQuery(query: String): List<Crate> {
 }
 
 @Stable
-class ListState {
+class ListState : ViewModel() {
     var crates by mutableStateOf<List<Crate>>(emptyList())
     var query by mutableStateOf("")
     var page by mutableIntStateOf(1)
