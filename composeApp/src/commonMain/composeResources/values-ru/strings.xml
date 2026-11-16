@@ -22,4 +22,6 @@
     <string name="language_toggle">Язык</string>
     <string name="data_source_mock">Тестовые данные</string>
     <string name="data_source_network">crates.io</string>
+    <string name="favorites_title">Избранное</string>
+    <string name="favorites_empty">Список избранного пуст</string>
 </resources>

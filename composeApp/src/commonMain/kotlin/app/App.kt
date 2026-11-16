@@ -9,14 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
@@ -31,11 +24,13 @@ import locale.LocalizedContent
 import navigation.Navigator
 import navigation.Screen
 import state.AppState
+import state.FavoritesState
 import theme.AppTheme
 import ui.dependencies.DependenciesScreen
 import ui.dependencies.DependenciesState
 import ui.detail.DetailScreen
 import ui.detail.DetailState
+import ui.favorites.FavoritesScreen
 import ui.list.ListScreen
 import ui.list.ListState
 import ui.owner.OwnerScreen
@@ -46,9 +41,9 @@ private const val SLIDE_MS = 300
 @Composable
 fun App() {
     val systemDark = isSystemInDarkTheme()
-    
     val appState: AppState = viewModel { AppState(isDarkTheme = systemDark) }
     val listState: ListState = viewModel { ListState() }
+    val favoritesState: FavoritesState = viewModel { FavoritesState() }
     
     val navigator = remember { Navigator() }
     val listScrollState = rememberLazyListState()
@@ -86,16 +81,23 @@ fun App() {
                             }
                             ListScreen(
                                 state = listState,
+                                favoritesState = favoritesState,
                                 language = appState.language,
                                 onQueryChange = { listState.query = it },
                                 onItemClick = { navigator.navigateTo(Screen.Detail(it.name)) },
                                 onLoadMore = { scope.launch { listState.loadNextPage(repository) } },
                                 onRetry = { scope.launch { listState.loadFirstPage(repository) } },
                                 onToggleTheme = { appState.toggleTheme() },
-                                onToggleLanguage = {
-                                    appState.changeLanguage(if (appState.language == "ru") "en" else "ru")
-                                },
+                                onToggleLanguage = { appState.changeLanguage(if (appState.language == "ru") "en" else "ru") },
+                                onOpenFavorites = { navigator.navigateTo(Screen.Favorites) },
                                 lazyListState = listScrollState,
+                            )
+                        }
+                        entry<Screen.Favorites> {
+                            FavoritesScreen(
+                                state = favoritesState,
+                                onCrateClick = { name -> navigator.navigateTo(Screen.Detail(name)) },
+                                onBack = { navigator.goBack() }
                             )
                         }
                         entry<Screen.Detail> { route ->
