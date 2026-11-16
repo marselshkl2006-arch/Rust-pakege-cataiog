@@ -1,13 +1,10 @@
 package locale
 
-import kotlin.js.ExperimentalWasmJsInterop
-
-@OptIn(ExperimentalWasmJsInterop::class)
 actual fun applyAppLanguage(language: String) {
     overrideNavigatorLanguage(language)
 }
 
-@OptIn(ExperimentalWasmJsInterop::class)
+// Compose resources read the browser language on web; override what navigator reports.
 private fun overrideNavigatorLanguage(lang: String): Unit = js(
     """{
         try {

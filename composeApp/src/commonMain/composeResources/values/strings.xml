@@ -22,4 +22,6 @@
     <string name="language_toggle">Language</string>
     <string name="data_source_mock">Mock data</string>
     <string name="data_source_network">crates.io</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_empty">Favorites list is empty</string>
 </resources>

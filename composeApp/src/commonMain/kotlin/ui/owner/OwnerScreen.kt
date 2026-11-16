@@ -71,6 +71,7 @@ private fun OwnerContent(owner: Owner, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        // The initial letter stays visible if the avatar cannot be loaded (offline, CORS on web).
         Box(
             modifier = Modifier.size(96.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center,

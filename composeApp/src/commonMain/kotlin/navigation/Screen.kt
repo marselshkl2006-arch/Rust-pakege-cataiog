@@ -3,7 +3,6 @@ package navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 sealed interface Screen : NavKey {
     @Serializable
@@ -17,4 +16,7 @@ sealed interface Screen : NavKey {
 
     @Serializable
     data class Owner(val login: String) : Screen
+
+    @Serializable
+    data object Favorites : Screen
 }
